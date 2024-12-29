@@ -1,0 +1,45 @@
+name: ZyroStaffUtils
+main: me.zyromate.zyrostaffutils.ZyroStaffUtils
+version: 1.0
+api-version: 1.8.8
+author: Zyromate
+description: A combined plugin that includes head rotation and anti-skilled commands for staff utilities.
+
+commands:
+  zyrostaffutils:
+    description: Base command for ZyroStaffUtils.
+    usage: /zyrostaffutils reload
+    permission: zyrostaffutils.reload
+  staffchat:
+    description: Toggles the staff chat on or off.
+    usage: /<command>
+    aliases: [sc, sct]
+  rotate:
+    description: Rotate a player's head.
+    usage: /rotate <player>
+    permission: zyrostaffutils.headrotate.use
+
+permissions:
+  zyrostaffutils.headrotate.use:
+    description: Allows a player to rotate other players' heads.
+    default: op
+
+  zyrostaffutils.antiskilled.bypass:
+    description: Allows a player to bypass the AntiSkilled check.
+    default: op
+
+  zyrostaffutils.flybooster.bypass:
+    description: Allows a player to bypass the FlyBoostLimiter check.
+    default: op
+
+  zyrostaffutils.reload:
+    description: Allows a player to reload the plugin's configuration.
+    default: op
+
+  zyrostaffutils.staffchat.use:
+    description: Allows a player to reload the plugin's configuration.
+    default: op
+
+  zyrostaffutils.staff.alerts:
+    description: Allows receiving staff alerts
+    default: op

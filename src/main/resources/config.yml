@@ -1,0 +1,78 @@
+# Configuration for HeadRotate
+HeadRotate:
+  is-activated: true
+  player-not-online: "&b&lSTAFF &7&l>> &fPlayer not found"
+  usage: "&b&lSTAFF &7&l>> &fUsage: /rotate <player>"
+  success-rotate: "&b&lSTAFF &7&l>> &fYou have rotated %player%'s head!"
+
+# Configuration for AntiSkilled
+AntiSkilled:
+  is-activated: true
+  ban-message: "[AUTOMATIC] Log off Skilled v3"
+  ban-duration: 10
+  bypass-message: "&c&l[ANTISKILLED] &7&l>> &fYou bypass this check."
+
+# Configuration for FlyBoostLimiter
+flyboostlimiter:
+  is-activated: true
+  max-x-boost: 2.0   # Max velocity on the X-axis
+  max-y-boost: 2.0   # Max velocity on the Y-axis
+  exceed-message: "&cYou are flying too fast! You have been teleported back."
+  alert: "&c[Alert] &4%player%&f may be flyboosting."
+
+# Configuration for Anti-Void
+Anti-Void:
+  is-activated: true
+  teleport-location:
+    world: world  # CaSe SeNsItIvE
+    x: 100.0
+    y: 65.0
+    z: 100.0
+  # List of blocked worlds where this feature won't work
+  blocked-worlds:
+    - world_nether
+    - world_the_end
+
+# Configuration for Staff-Chat
+Staff-Chat:
+  is-activated: true
+  prefix: '&7[&cStaffChat&7] '
+  enabled: '&aStaff Chat has been toggled on!'
+  disabled: '&cStaff Chat has been toggled off!'
+  invalid-permission: '&cYou do not have permission to use this command.'
+
+# Configuration for Anti-CaneNuke
+Anti-CaneNuke:
+  is-activated: true
+  cane-limit: 10                                                     # Maximum number of cane breaks allowed before triggering the limit
+  cooldown-time: 60                                                  # Cooldown period in seconds after reaching the cane break limit
+  reset-time: 200                                                    # Time period in ticks (20 ticks = 1 second) for resetting the break limit
+  cooldown-message: "You are on cooldown for %time% seconds."        # Message shown when player is on cooldown
+  limit-exceeded-message: "You have exceeded the cane break limit!"  # Message shown when limit is exceeded
+
+# Configuration for Soft Freeze
+SoftFreeze:
+  permission: "zyrostaffutils.softfreeze.use"
+  invalid-permission: "&cYou do not have permission to use the SoftFreeze command."
+  usage: "&cUsage: /softfreeze <player>"
+  player-not-online: "&cThe player is not online."
+  frozen-message: "&a%player% has been frozen successfully."
+  frozen-target-message: "&cYou have been frozen!"
+  unfrozen-message: "&a%player% has been unfrozen."
+  unfrozen-target-message: "&cYou have been unfrozen!"
+  reminder-message: "&eYou are still frozen. Please wait."
+  ban-message: "&cYou have been banned for logging out while frozen."
+  reminder-interval: 300
+
+
+# General Plugin Configuration
+plugin-reload: "&aPlugin has been successfully reloaded."
+invalid-permission: "&cYou don't have permission to reload the plugin."
+
+# PERMISSIONS
+# zyrostaffutils.flybooster.bypass
+# zyrostaffutils.antiskilled.bypass
+# zyrostaffutils.headrotate.use
+# zyrostaffutils.staffchat.use
+# zyrostaffutils.staff.alerts
+# zyrostaffutils.reload
