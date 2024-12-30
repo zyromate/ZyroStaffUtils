@@ -1,25 +1,26 @@
-package me.zyromate.zyrostaffutils.Managers;
+package me.zyromate.zyrostaffutils.Cmds;
 
 import me.zyromate.zyrostaffutils.Utils.ChatUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
-public class HeadRotate implements CommandExecutor {
+public class HeadRotateCommand implements CommandExecutor {
 
     private final JavaPlugin plugin;
     private FileConfiguration config;
     private ChatUtils chatUtils;
     private boolean isInitialized = false;
 
-    public HeadRotate(JavaPlugin plugin) {
+    public HeadRotateCommand(JavaPlugin plugin) {
         this.plugin = plugin;
         init();
     }
@@ -42,14 +43,6 @@ public class HeadRotate implements CommandExecutor {
         chatUtils.sendInitialization("HeadRotate");
     }
 
-    public void reloadSettings() {
-        config = plugin.getConfig();
-        chatUtils = new ChatUtils(plugin);
-        if (!isActivated()) return;
-        chatUtils.onReload("HeadRotate");
-    }
-
-
     private boolean isActivated() {
         return config.getBoolean("HeadRotate.is-activated");
     }
@@ -61,21 +54,26 @@ public class HeadRotate implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (args.length != 1) {
-            String usage = config.getString("HeadRotate.usage");
-            chatUtils.sendMessage(player, usage);
-            return true;
-        }
+        CompletableFuture.runAsync(() -> {
+            if (args.length != 1) {
+                String usage = config.getString("HeadRotate.usage");
+                Bukkit.getScheduler().runTask(plugin, () -> chatUtils.sendMessage(player, usage));
+                return;
+            }
 
-        Player target = Bukkit.getPlayer(args[0]);
-        if (target != null) {
-            rotatePlayerHead(target);
-            String rotateSuccess = config.getString("HeadRotate.success-rotate");
-            chatUtils.sendMessage(player, rotateSuccess.replace("%player%", target.getDisplayName()));
-        } else {
-            String playerNotFound = config.getString("HeadRotate.player-not-online");
-            chatUtils.sendMessage(player, playerNotFound);
-        }
+            Player target = Bukkit.getPlayer(args[0]);
+            if (target != null) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    rotatePlayerHead(target);
+                    String rotateSuccess = config.getString("HeadRotate.success-rotate");
+                    chatUtils.sendMessage(player, rotateSuccess.replace("%player%", target.getDisplayName()));
+                });
+            } else {
+                String playerNotFound = config.getString("HeadRotate.player-not-online");
+                Bukkit.getScheduler().runTask(plugin, () -> chatUtils.sendMessage(player, playerNotFound));
+            }
+        });
+
         return true;
     }
 

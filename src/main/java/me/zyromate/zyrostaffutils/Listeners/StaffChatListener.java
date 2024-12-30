@@ -62,11 +62,4 @@ public class StaffChatListener implements Listener {
             }
         }
     }
-    public void reloadSettings() {
-        config = plugin.getConfig();
-        staffChatToggledPlayers.clear();
-            config = plugin.getConfig();
-            if (!plugin.getConfig().getBoolean("Staff-Chat.is-activated")) return;
-            chatUtils.onReload("Staff-Chat");
-    }
 }

@@ -6,61 +6,58 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class YPositionCheckListener implements Listener {
 
     private final ZyroStaffUtils plugin;
-    private FileConfiguration config;
     private final ChatUtils chatUtils;
 
     public YPositionCheckListener(ZyroStaffUtils plugin) {
         this.plugin = plugin;
         this.chatUtils = new ChatUtils(plugin);
         plugin.saveDefaultConfig();
-        this.config = plugin.getConfig();
         chatUtils.sendInitialization("Anti-Void");
     }
 
-    public void reloadSettings() {
-        plugin.reloadConfig();
-        config = plugin.getConfig();
-        if (!isActivated()) return;
-        chatUtils.onReload("Anti-Void");
-    }
-
-    private boolean isActivated() {
-        // Make sure to check for null before accessing the config
-        return config != null && config.getBoolean("Anti-Void.is-activated", true);
+    private boolean isActivated(FileConfiguration config) {
+        return config.getBoolean("Anti-Void.is-activated", true);
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!isActivated()) return;
-
         Player player = event.getPlayer();
         Location location = player.getLocation();
 
-        if (isInBlockedWorld(location.getWorld().getName())) {
-            return;
-        }
+        CompletableFuture.runAsync(() -> {
+            FileConfiguration config = plugin.getConfig();
 
-        if (location.getY() <= -1) {
-            teleportPlayerToConfiguredLocation(player);
-        }
+            if (!isActivated(config)) {
+                return;
+            }
+
+            if (isInBlockedWorld(config, location.getWorld().getName())) {
+                return;
+            }
+
+            if (location.getY() <= -1) {
+                Bukkit.getScheduler().runTask(plugin, () -> teleportPlayerToConfiguredLocation(player, config));
+            }
+        });
     }
 
-    private boolean isInBlockedWorld(String worldName) {
+    private boolean isInBlockedWorld(FileConfiguration config, String worldName) {
         List<String> blockedWorlds = config.getStringList("Anti-Void.blocked-worlds");
         return blockedWorlds.contains(worldName);
     }
 
-    private void teleportPlayerToConfiguredLocation(Player player) {
+    private void teleportPlayerToConfiguredLocation(Player player, FileConfiguration config) {
         String worldName = config.getString("Anti-Void.teleport-location.world");
         double x = config.getDouble("Anti-Void.teleport-location.x");
         double y = config.getDouble("Anti-Void.teleport-location.y");

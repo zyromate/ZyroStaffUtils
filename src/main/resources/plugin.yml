@@ -8,8 +8,8 @@ description: A combined plugin that includes head rotation and anti-skilled comm
 commands:
   zyrostaffutils:
     description: Base command for ZyroStaffUtils.
-    usage: /zyrostaffutils reload
-    permission: zyrostaffutils.reload
+    usage: /<command> reload
+    aliases: [zsu, zyrostaffutils]
   staffchat:
     description: Toggles the staff chat on or off.
     usage: /<command>
@@ -17,7 +17,10 @@ commands:
   rotate:
     description: Rotate a player's head.
     usage: /rotate <player>
-    permission: zyrostaffutils.headrotate.use
+  softfreeze:
+    description: Soft freezes a player
+    usage: /<command> <player>
+    aliases: [sfreeze, softfreeze, softf]
 
 permissions:
   zyrostaffutils.headrotate.use:
@@ -25,11 +28,11 @@ permissions:
     default: op
 
   zyrostaffutils.antiskilled.bypass:
-    description: Allows a player to bypass the AntiSkilled check.
+    description: Allows a player to bypass the AntiSkilled.
     default: op
 
   zyrostaffutils.flybooster.bypass:
-    description: Allows a player to bypass the FlyBoostLimiter check.
+    description: Allows a player to bypass the FlyBoostLimiter.
     default: op
 
   zyrostaffutils.reload:
@@ -37,9 +40,13 @@ permissions:
     default: op
 
   zyrostaffutils.staffchat.use:
-    description: Allows a player to reload the plugin's configuration.
+    description: Allows a player to use staff chat.
     default: op
 
   zyrostaffutils.staff.alerts:
     description: Allows receiving staff alerts
+    default: op
+
+  zyrostaffutils.softfreeze.use:
+    description: Allows a player to use soft freeze
     default: op

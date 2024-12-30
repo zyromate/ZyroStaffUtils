@@ -1,4 +1,4 @@
-package me.zyromate.zyrostaffutils.Managers;
+package me.zyromate.zyrostaffutils.Listeners;
 
 import me.zyromate.zyrostaffutils.Utils.ChatUtils;
 import org.bukkit.Bukkit;
@@ -9,13 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class AntiSkilled implements Listener {
+public class CommandListener implements Listener {
 
     private final JavaPlugin plugin;
     private FileConfiguration config;
     private ChatUtils chatUtils;
 
-    public AntiSkilled(JavaPlugin plugin) {
+    public CommandListener(JavaPlugin plugin) {
         this.plugin = plugin;
         this.chatUtils = new ChatUtils(plugin);
         this.config = plugin.getConfig();
@@ -30,13 +30,6 @@ public class AntiSkilled implements Listener {
 
     private boolean isActivated() {
         return config.getBoolean("AntiSkilled.is-activated");
-    }
-
-    public void reloadSettings() {
-        config = plugin.getConfig();
-        chatUtils = new ChatUtils(plugin);
-        if (!isActivated()) return;
-        chatUtils.onReload("Anti-Skilled");
     }
 
     @EventHandler

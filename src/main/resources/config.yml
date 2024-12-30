@@ -1,20 +1,20 @@
 # Configuration for HeadRotate
 HeadRotate:
-  is-activated: true
+  is-activated: false
   player-not-online: "&b&lSTAFF &7&l>> &fPlayer not found"
   usage: "&b&lSTAFF &7&l>> &fUsage: /rotate <player>"
   success-rotate: "&b&lSTAFF &7&l>> &fYou have rotated %player%'s head!"
 
 # Configuration for AntiSkilled
 AntiSkilled:
-  is-activated: true
+  is-activated: false
   ban-message: "[AUTOMATIC] Log off Skilled v3"
   ban-duration: 10
   bypass-message: "&c&l[ANTISKILLED] &7&l>> &fYou bypass this check."
 
 # Configuration for FlyBoostLimiter
 flyboostlimiter:
-  is-activated: true
+  is-activated: false
   max-x-boost: 2.0   # Max velocity on the X-axis
   max-y-boost: 2.0   # Max velocity on the Y-axis
   exceed-message: "&cYou are flying too fast! You have been teleported back."
@@ -22,7 +22,7 @@ flyboostlimiter:
 
 # Configuration for Anti-Void
 Anti-Void:
-  is-activated: true
+  is-activated: false
   teleport-location:
     world: world  # CaSe SeNsItIvE
     x: 100.0
@@ -35,7 +35,7 @@ Anti-Void:
 
 # Configuration for Staff-Chat
 Staff-Chat:
-  is-activated: true
+  is-activated: false
   prefix: '&7[&cStaffChat&7] '
   enabled: '&aStaff Chat has been toggled on!'
   disabled: '&cStaff Chat has been toggled off!'
@@ -43,7 +43,7 @@ Staff-Chat:
 
 # Configuration for Anti-CaneNuke
 Anti-CaneNuke:
-  is-activated: true
+  is-activated: false
   cane-limit: 10                                                     # Maximum number of cane breaks allowed before triggering the limit
   cooldown-time: 60                                                  # Cooldown period in seconds after reaching the cane break limit
   reset-time: 200                                                    # Time period in ticks (20 ticks = 1 second) for resetting the break limit
@@ -52,7 +52,7 @@ Anti-CaneNuke:
 
 # Configuration for Soft Freeze
 SoftFreeze:
-  permission: "zyrostaffutils.softfreeze.use"
+  is-activated: false
   invalid-permission: "&cYou do not have permission to use the SoftFreeze command."
   usage: "&cUsage: /softfreeze <player>"
   player-not-online: "&cThe player is not online."
@@ -62,7 +62,6 @@ SoftFreeze:
   unfrozen-target-message: "&cYou have been unfrozen!"
   reminder-message: "&eYou are still frozen. Please wait."
   ban-message: "&cYou have been banned for logging out while frozen."
-  reminder-interval: 300
 
 
 # General Plugin Configuration
@@ -70,6 +69,7 @@ plugin-reload: "&aPlugin has been successfully reloaded."
 invalid-permission: "&cYou don't have permission to reload the plugin."
 
 # PERMISSIONS
+# zyrostaffutils.softfreeze.use
 # zyrostaffutils.flybooster.bypass
 # zyrostaffutils.antiskilled.bypass
 # zyrostaffutils.headrotate.use

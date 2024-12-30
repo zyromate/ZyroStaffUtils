@@ -8,14 +8,14 @@ import me.zyromate.zyrostaffutils.Listeners.FlyBoostLimiter;
 import me.zyromate.zyrostaffutils.Listeners.StaffChatListener;
 import me.zyromate.zyrostaffutils.Listeners.YPositionCheckListener;
 import me.zyromate.zyrostaffutils.Listeners.SoftFreezeListener;
-import me.zyromate.zyrostaffutils.Managers.AntiSkilled;
-import me.zyromate.zyrostaffutils.Managers.HeadRotate;
+import me.zyromate.zyrostaffutils.Listeners.CommandListener;
+import me.zyromate.zyrostaffutils.Cmds.HeadRotateCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ZyroStaffUtils extends JavaPlugin {
 
-    private HeadRotate headRotateManager;
-    private AntiSkilled antiSkilledManager;
+    private HeadRotateCommand headRotateManager;
+    private CommandListener antiSkilledManager;
     private YPositionCheckListener yPositionCheckListener;
     private FlyBoostLimiter flyBoostLimiter;
     private StaffChatListener staffChatListener;
@@ -38,10 +38,10 @@ public final class ZyroStaffUtils extends JavaPlugin {
     }
 
     private void registerManagers() {
-        headRotateManager = new HeadRotate(this);
+        headRotateManager = new HeadRotateCommand(this);
         headRotateManager.init();
 
-        antiSkilledManager = new AntiSkilled(this);
+        antiSkilledManager = new CommandListener(this);
         antiSkilledManager.init();
     }
 
@@ -63,10 +63,7 @@ public final class ZyroStaffUtils extends JavaPlugin {
         StaffChatCommand staffChatCommand = new StaffChatCommand(this);
         SoftFreezeCommand softFreezeCommand = new SoftFreezeCommand(this);
 
-        getCommand("zyrostaffutils").setExecutor(
-                new ReloadCommand(this, antiSkilledManager, headRotateManager, yPositionCheckListener, flyBoostLimiter,
-                        staffChatCommand, staffChatListener, caneBreakListener));
-
+        getCommand("zyrostaffutils").setExecutor(new ReloadCommand(this));
         getCommand("staffchat").setExecutor(staffChatCommand);
         getCommand("sc").setExecutor(staffChatCommand);
         getCommand("sct").setExecutor(staffChatCommand);
@@ -81,11 +78,11 @@ public final class ZyroStaffUtils extends JavaPlugin {
         getLogger().info("---------------------------");
     }
 
-    public AntiSkilled getAntiSkilledManager() {
+    public CommandListener getAntiSkilledManager() {
         return antiSkilledManager;
     }
 
-    public HeadRotate getHeadRotateManager() {
+    public HeadRotateCommand getHeadRotateManager() {
         return headRotateManager;
     }
 

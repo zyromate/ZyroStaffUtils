@@ -32,12 +32,6 @@ public class FlyBoostLimiter implements Listener {
         chatUtils.sendInitialization("FlyBoostLimiter");
     }
 
-    public void reloadSettings() {
-        config = plugin.getConfig();
-        if (!config.getBoolean("flyboostlimiter.is-activated")) return;
-        chatUtils.onReload("FlyBoostLimiter");
-    }
-
     private boolean isActivated() {
         return config.getBoolean("flyboostlimiter.is-activated");
     }

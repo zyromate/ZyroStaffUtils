@@ -69,13 +69,4 @@ public class CaneBreakListener implements Listener {
     private boolean isActivated() {
         return config.getBoolean("Anti-CaneNuke.is-activated");
     }
-
-    public void reloadSettings() {
-        plugin.reloadConfig();
-        if (isActivated()) {
-            chatUtils.onReload("Anti-CaneNuke");
-        } else {
-            plugin.getLogger().info("Anti-CaneNuke is deactivated.");
-        }
-    }
 }

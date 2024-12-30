@@ -56,8 +56,4 @@ public class StaffChatCommand implements CommandExecutor {
         String messageKey = isToggled ? "Staff-Chat.enabled" : "Staff-Chat.disabled";
         chatUtils.sendMessage(player, plugin.getConfig().getString(messageKey));
     }
-
-    public void reloadSettings() {
-        plugin.getConfig();
-    }
 }
