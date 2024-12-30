@@ -35,7 +35,7 @@ public class SoftFreezeCommand implements CommandExecutor {
     }
 
     private boolean isActivated() {
-        return config.getBoolean("softfreeze.is-activated");
+        return config.getBoolean("SoftFreeze.is-activated");
     }
 
     @Override
@@ -58,7 +58,13 @@ public class SoftFreezeCommand implements CommandExecutor {
         }
 
         if (args.length != 1) {
-            chatUtils.sendMessage(player, config.getString("SoftFreeze.usage"));
+            if (config.isList("SoftFreeze.usage")) {
+                for (String line : config.getStringList("SoftFreeze.usage")) {
+                    chatUtils.sendMessage(player, line);
+                }
+            } else {
+                chatUtils.sendMessage(player, config.getString("SoftFreeze.usage"));
+            }
             return true;
         }
 

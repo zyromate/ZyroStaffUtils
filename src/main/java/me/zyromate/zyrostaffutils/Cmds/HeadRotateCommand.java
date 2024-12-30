@@ -49,15 +49,26 @@ public class HeadRotateCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!command.getName().equalsIgnoreCase("rotate")) return false;
-        if (!(sender instanceof Player)) return true;
+        if (!command.getName().equalsIgnoreCase("rotate")) return true;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Console is not allowed to use Head Rotate. Too bad");
+            return true;
+        }
 
         Player player = (Player) sender;
 
         CompletableFuture.runAsync(() -> {
             if (args.length != 1) {
-                String usage = config.getString("HeadRotate.usage");
-                Bukkit.getScheduler().runTask(plugin, () -> chatUtils.sendMessage(player, usage));
+                if (config.isList("HeadRotate.usage")) {
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        for (String line : config.getStringList("HeadRotate.usage")) {
+                            chatUtils.sendMessage(player, line);
+                        }
+                    });
+                } else {
+                    String usage = config.getString("HeadRotate.usage", "Usage: /rotate <player>");
+                    Bukkit.getScheduler().runTask(plugin, () -> chatUtils.sendMessage(player, usage));
+                }
                 return;
             }
 
@@ -76,6 +87,8 @@ public class HeadRotateCommand implements CommandExecutor {
 
         return true;
     }
+
+
 
     private void rotatePlayerHead(Player target) {
         Random random = new Random();

@@ -3,23 +3,19 @@ main: me.zyromate.zyrostaffutils.ZyroStaffUtils
 version: 1.0
 api-version: 1.8.8
 author: Zyromate
-description: A combined plugin that includes head rotation and anti-skilled commands for staff utilities.
+description: Very cool plugin and somehow works
 
 commands:
   zyrostaffutils:
     description: Base command for ZyroStaffUtils.
-    usage: /<command> reload
     aliases: [zsu, zyrostaffutils]
   staffchat:
     description: Toggles the staff chat on or off.
-    usage: /<command>
     aliases: [sc, sct]
   rotate:
     description: Rotate a player's head.
-    usage: /rotate <player>
   softfreeze:
     description: Soft freezes a player
-    usage: /<command> <player>
     aliases: [sfreeze, softfreeze, softf]
 
 permissions:

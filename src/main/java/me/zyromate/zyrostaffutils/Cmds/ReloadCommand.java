@@ -1,7 +1,7 @@
 package me.zyromate.zyrostaffutils.Cmds;
 
-import me.zyromate.zyrostaffutils.Utils.ChatUtils;
 import me.zyromate.zyrostaffutils.ZyroStaffUtils;
+import me.zyromate.zyrostaffutils.Utils.ChatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

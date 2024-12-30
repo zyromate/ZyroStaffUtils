@@ -1,24 +1,26 @@
 # Configuration for HeadRotate
 HeadRotate:
   is-activated: false
-  player-not-online: "&b&lSTAFF &7&l>> &fPlayer not found"
-  usage: "&b&lSTAFF &7&l>> &fUsage: /rotate <player>"
-  success-rotate: "&b&lSTAFF &7&l>> &fYou have rotated %player%'s head!"
+  player-not-online: "&b&lSTAFF &8&l» &fPlayer not found"
+  usage:
+    - "&6_____________.[ &2Head Rotate &6]._____________"
+    - "&b/rotate &3[player] &eRotates targeted player's head."
+  success-rotate: "&b&lSTAFF &8&l» &fYou have rotated &b%player%'s&f head!"
 
 # Configuration for AntiSkilled
 AntiSkilled:
   is-activated: false
   ban-message: "[AUTOMATIC] Log off Skilled v3"
   ban-duration: 10
-  bypass-message: "&c&l[ANTISKILLED] &7&l>> &fYou bypass this check."
+  bypass-message: "&c&l[ANTISKILLED] &8&l» &fYou bypass this check."
 
 # Configuration for FlyBoostLimiter
 flyboostlimiter:
   is-activated: false
   max-x-boost: 2.0   # Max velocity on the X-axis
   max-y-boost: 2.0   # Max velocity on the Y-axis
-  exceed-message: "&cYou are flying too fast! You have been teleported back."
-  alert: "&c[Alert] &4%player%&f may be flyboosting."
+  exceed-message: "&cYou are flying too fast!"
+  alert: "&c&lAlert &7&l» &4%player%&f may be flyboosting."
 
 # Configuration for Anti-Void
 Anti-Void:
@@ -36,7 +38,7 @@ Anti-Void:
 # Configuration for Staff-Chat
 Staff-Chat:
   is-activated: false
-  prefix: '&7[&cStaffChat&7] '
+  prefix: '&8[&cStaffChat&8] '
   enabled: '&aStaff Chat has been toggled on!'
   disabled: '&cStaff Chat has been toggled off!'
   invalid-permission: '&cYou do not have permission to use this command.'
@@ -52,15 +54,17 @@ Anti-CaneNuke:
 
 # Configuration for Soft Freeze
 SoftFreeze:
-  is-activated: false
+  is-activated: true
   invalid-permission: "&cYou do not have permission to use the SoftFreeze command."
-  usage: "&cUsage: /softfreeze <player>"
+  usage:
+    - "&6_____________.[ &2SoftFreeze &6]._____________"
+    - "&b/softfreeze &3[player]"
   player-not-online: "&cThe player is not online."
   frozen-message: "&a%player% has been frozen successfully."
-  frozen-target-message: "&cYou have been frozen!"
+  frozen-target-message: "&cYou have been soft frozen!"
   unfrozen-message: "&a%player% has been unfrozen."
-  unfrozen-target-message: "&cYou have been unfrozen!"
-  reminder-message: "&eYou are still frozen. Please wait."
+  unfrozen-target-message: "&cYou have been soft unfrozen!"
+  reminder-message: "&eYou have been Soft Frozen. Please do not log off."
   ban-message: "&cYou have been banned for logging out while frozen."
 
 
