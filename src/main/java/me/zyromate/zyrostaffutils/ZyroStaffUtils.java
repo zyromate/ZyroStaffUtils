@@ -17,12 +17,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public final class ZyroStaffUtils extends JavaPlugin {
-
     // Managers
     private HeadRotateCommand headRotateManager;
     private CommandListener antiSkilledManager;
-
-    // Commands
     private SoftFreezeCommand softFreezeCommand;
 
     // Listeners
@@ -35,11 +32,7 @@ public final class ZyroStaffUtils extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        reloadConfigWithUTF8();
-        registerManagers();  // Initialize and configure managers
-        registerCommands();  // Register commands
-        registerListeners(); // Register event listeners
-
+        registerComponents();
         logPluginStatus("enabled");
     }
 
@@ -48,48 +41,32 @@ public final class ZyroStaffUtils extends JavaPlugin {
         logPluginStatus("disabled");
     }
 
-    /**
-     * Initializes and sets up all managers.
-     */
-    private void registerManagers() {
-        // HeadRotate manager
+    private void registerComponents() {
+        // Initialize managers
         headRotateManager = new HeadRotateCommand(this);
         headRotateManager.init();
 
-        // Command listener manager
         antiSkilledManager = new CommandListener(this);
         antiSkilledManager.init();
 
-        // Shared SoftFreezeCommand instance
         softFreezeCommand = new SoftFreezeCommand(this);
-    }
-
-    /**
-     * Registers all commands with their executors.
-     */
-    private void registerCommands() {
-        StaffChatCommand staffChatCommand = new StaffChatCommand(this);
 
         // Register commands
+        StaffChatCommand staffChatCommand = new StaffChatCommand(this);
         getCommand("zyrostaffutils").setExecutor(new ReloadCommand(this));
         getCommand("staffchat").setExecutor(staffChatCommand);
         getCommand("sc").setExecutor(staffChatCommand);
         getCommand("sct").setExecutor(staffChatCommand);
         getCommand("softfreeze").setExecutor(softFreezeCommand);
-    }
 
-    /**
-     * Registers all listeners for handling events.
-     */
-    private void registerListeners() {
-        // Listener initializations
+        // Initialize listeners
         yPositionCheckListener = new YPositionCheckListener(this);
         flyBoostLimiter = new FlyBoostLimiter(this);
         staffChatListener = new StaffChatListener(this);
         caneBreakListener = new CaneBreakListener(this);
-        softFreezeListener = new SoftFreezeListener(softFreezeCommand); // Pass shared command instance
+        softFreezeListener = new SoftFreezeListener(softFreezeCommand);
 
-        // Register events
+        // Register listeners
         getServer().getPluginManager().registerEvents(yPositionCheckListener, this);
         getServer().getPluginManager().registerEvents(flyBoostLimiter, this);
         getServer().getPluginManager().registerEvents(staffChatListener, this);
@@ -97,11 +74,6 @@ public final class ZyroStaffUtils extends JavaPlugin {
         getServer().getPluginManager().registerEvents(softFreezeListener, this);
     }
 
-    /**
-     * Logs the current plugin status (enabled/disabled).
-     *
-     * @param status The plugin status as a string.
-     */
     private void logPluginStatus(String status) {
         getLogger().info("---------------------------");
         getLogger().info("Author: Zyromate");
@@ -109,35 +81,6 @@ public final class ZyroStaffUtils extends JavaPlugin {
         getLogger().info("Status: " + status);
         getLogger().info("---------------------------");
     }
-
-    private void reloadConfigWithUTF8() {
-        try {
-            // Read the config.yml as a string with UTF-8 encoding
-            InputStream resourceStream = getResource("config.yml");
-            if (resourceStream != null) {
-                String configContent = readStreamAsUTF8(resourceStream);
-                getConfig().loadFromString(configContent);
-            } else {
-                getLogger().warning("Could not find config.yml resource in the plugin jar.");
-            }
-        } catch (Exception e) {
-            getLogger().warning("Failed to load config.yml with UTF-8 encoding. Falling back to default.");
-            e.printStackTrace();
-        }
-    }
-
-    private String readStreamAsUTF8(InputStream stream) throws Exception {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, java.nio.charset.StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        }
-        return content.toString();
-    }
-
-
 
     // Getter methods for accessing managers and listeners
     public CommandListener getAntiSkilledManager() {

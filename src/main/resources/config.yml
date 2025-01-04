@@ -45,10 +45,10 @@ Staff-Chat:
 
 # Configuration for Anti-CaneNuke
 Anti-CaneNuke:
-  is-activated: false
-  cane-limit: 10                                                     # Maximum number of cane breaks allowed before triggering the limit
+  is-activated: true
+  cane-limit: 110                                                    # Maximum number of cane breaks allowed before triggering the limit
   cooldown-time: 60                                                  # Cooldown period in seconds after reaching the cane break limit
-  reset-time: 200                                                    # Time period in ticks (20 ticks = 1 second) for resetting the break limit
+  reset-time: 100                                                    # Time period in ticks (20 ticks = 1 second) for resetting the break limit
   cooldown-message: "You are on cooldown for %time% seconds."        # Message shown when player is on cooldown
   limit-exceeded-message: "You have exceeded the cane break limit!"  # Message shown when limit is exceeded
 
