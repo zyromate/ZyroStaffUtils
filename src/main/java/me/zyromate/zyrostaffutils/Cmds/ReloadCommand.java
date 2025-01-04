@@ -16,20 +16,16 @@ public class ReloadCommand implements CommandExecutor {
         this.plugin = plugin;
         this.chatUtils = new ChatUtils(plugin);
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
             if (!player.hasPermission("zyrostaffutils.reload")) {
                 String noPerm = plugin.getConfig().getString("invalid-permission");
                 chatUtils.sendMessage(player, noPerm);
                 return true;
             }
-
-            reloadPlugin(player);
+            reloadPlugin(sender);
         } else {
             reloadPlugin(sender);
         }
@@ -39,13 +35,12 @@ public class ReloadCommand implements CommandExecutor {
 
     private void reloadPlugin(CommandSender sender) {
         plugin.reloadConfig();
-
         String reloadMessage = plugin.getConfig().getString("plugin-reload");
-        if (reloadMessage != null) {
+        if (sender instanceof Player) {
             chatUtils.sendMessage(sender, reloadMessage);
         } else {
-            sender.sendMessage("ZyroStaffUtils has been reloaded.");
-            chatUtils.onReload();
+            sender.sendMessage(reloadMessage);
         }
+        chatUtils.onReload();
     }
 }

@@ -10,6 +10,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.UUID;
 
 public class CaneBreakListener implements Listener {
@@ -27,6 +29,8 @@ public class CaneBreakListener implements Listener {
     private final String cooldownMessage;
     private final String limitExceededMessage;
 
+    private final ExecutorService executorService;
+
     public CaneBreakListener(JavaPlugin plugin) {
         this.plugin = plugin;
         this.chatUtils = new ChatUtils(plugin);
@@ -40,6 +44,9 @@ public class CaneBreakListener implements Listener {
         this.cooldownMessage = config.getString("Anti-CaneNuke.cooldown-message", "You are on cooldown for %time% seconds.");
         this.limitExceededMessage = config.getString("Anti-CaneNuke.limit-exceeded-message", "You have exceeded the cane break limit!");
 
+        // Initialize thread pool for async tasks
+        this.executorService = Executors.newFixedThreadPool(4);
+
         if (isActivated()) {
             chatUtils.sendInitialization("Anti-CaneNuke");
         }
@@ -48,40 +55,67 @@ public class CaneBreakListener implements Listener {
     @EventHandler
     public void onCaneBroken(BlockBreakEvent event) {
         if (!isActivated()) return;
+
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
         Material blockType = event.getBlock().getType();
+
         if (blockType != Material.SUGAR_CANE_BLOCK) return;
+
+        // Run cane break processing asynchronously
+        executorService.execute(() -> processCaneBreak(event, player, playerUUID));
+    }
+
+    private void processCaneBreak(BlockBreakEvent event, Player player, UUID playerUUID) {
         long currentTime = System.currentTimeMillis();
+
+        // Check if the player is on cooldown
         if (cooldownStartTime.containsKey(playerUUID)) {
             long timeOnCooldown = currentTime - cooldownStartTime.get(playerUUID);
             if (timeOnCooldown < cooldownTime) {
                 long timeLeft = (cooldownTime - timeOnCooldown) / 1000; // Convert to seconds
                 String message = cooldownMessage.replace("%time%", String.valueOf(timeLeft));
-                chatUtils.sendMessage(player, message);
-                event.setCancelled(true);
+
+                // Send message and cancel the event on the main thread
+                plugin.getServer().getScheduler().runTask(plugin, () -> {
+                    chatUtils.sendMessage(player, message);
+                    event.setCancelled(true);
+                });
                 return;
             } else {
                 cooldownStartTime.remove(playerUUID);
                 caneBreakCount.put(playerUUID, 0);
             }
         }
+
         long lastBreakTime = caneBreakTime.getOrDefault(playerUUID, 0L);
+
+        // Reset the cane break count if the reset time has passed
         if (currentTime - lastBreakTime > resetTime) {
             caneBreakCount.put(playerUUID, 0);
         }
+
         int currentBreakCount = caneBreakCount.getOrDefault(playerUUID, 0) + 1;
         caneBreakCount.put(playerUUID, currentBreakCount);
         caneBreakTime.put(playerUUID, currentTime);
+
+        // If the cane break limit is exceeded, start the cooldown
         if (currentBreakCount > caneLimit) {
             cooldownStartTime.put(playerUUID, currentTime);
-            chatUtils.sendMessage(player, limitExceededMessage);
-            event.setCancelled(true);
-            return;
+
+            // Send message and cancel the event on the main thread
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                chatUtils.sendMessage(player, limitExceededMessage);
+                event.setCancelled(true);
+            });
         }
     }
 
     private boolean isActivated() {
         return config.getBoolean("Anti-CaneNuke.is-activated");
+    }
+
+    public void shutdown() {
+        executorService.shutdown();
     }
 }
