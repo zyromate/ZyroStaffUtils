@@ -42,11 +42,9 @@ public class HeadRotateCommand implements CommandExecutor {
 
         chatUtils.sendInitialization("HeadRotate");
     }
-
     private boolean isActivated() {
         return config.getBoolean("HeadRotate.is-activated");
     }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!command.getName().equalsIgnoreCase("rotate")) return true;

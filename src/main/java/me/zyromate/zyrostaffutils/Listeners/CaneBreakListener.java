@@ -68,15 +68,11 @@ public class CaneBreakListener implements Listener {
 
     private void processCaneBreak(BlockBreakEvent event, Player player, UUID playerUUID) {
         long currentTime = System.currentTimeMillis();
-
-        // Check if the player is on cooldown
         if (cooldownStartTime.containsKey(playerUUID)) {
             long timeOnCooldown = currentTime - cooldownStartTime.get(playerUUID);
             if (timeOnCooldown < cooldownTime) {
                 long timeLeft = (cooldownTime - timeOnCooldown) / 1000; // Convert to seconds
                 String message = cooldownMessage.replace("%time%", String.valueOf(timeLeft));
-
-                // Send message and cancel the event on the main thread
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     chatUtils.sendMessage(player, message);
                     event.setCancelled(true);

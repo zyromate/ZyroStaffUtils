@@ -39,7 +39,7 @@ public class ChatUtils {
         plugin.getLogger().info("---------------------------");
     }
 
-    public void sendMessageToStaff(Player player, String message) {
+    public void sendMessageToStaff(String message) {
         String formattedMessage = ChatColor.translateAlternateColorCodes('&', message);
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

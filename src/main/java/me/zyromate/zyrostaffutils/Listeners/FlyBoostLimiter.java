@@ -3,11 +3,15 @@ package me.zyromate.zyrostaffutils.Listeners;
 import me.zyromate.zyrostaffutils.Utils.ChatUtils;
 import me.zyromate.zyrostaffutils.ZyroStaffUtils;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.util.Vector;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class FlyBoostLimiter implements Listener {
 
@@ -15,6 +19,8 @@ public class FlyBoostLimiter implements Listener {
     private final ChatUtils chatUtils;
     private double maxXBoostLimit;
     private double maxYBoostLimit;
+    private final Set<Player> usersFlagging = new HashSet<>();
+    private static final String PERMISSION = "zyrostaffutils.flybooster.bypass";
     private FileConfiguration config;
 
     public FlyBoostLimiter(ZyroStaffUtils plugin) {
@@ -41,31 +47,29 @@ public class FlyBoostLimiter implements Listener {
         if (!isActivated()) return;
 
         Player player = event.getPlayer();
+        if (!player.isFlying()) return;
 
-        if (player.hasPermission("zyrostaffutils.flybooster.bypass") || !player.isFlying()) return;
+        Location oldLoc = event.getFrom();
+        Location newLoc = event.getTo();
 
-        handlePlayerMovement(event, player);
-    }
+        if (newLoc == null) return;
 
-    private void handlePlayerMovement(PlayerMoveEvent event, Player player) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
+        double horizontalDistance = Math.sqrt(
+                Math.pow(newLoc.getX() - oldLoc.getX(), 2) +
+                        Math.pow(newLoc.getZ() - oldLoc.getZ(), 2)
+        );
 
-        if (to == null || from == null) return;
+        double verticalDistance = Math.abs(newLoc.getY() - oldLoc.getY());
 
-        double deltaX = Math.abs(to.getX() - from.getX());
-        double deltaY = Math.abs(to.getY() - from.getY());
-
-        if (deltaX > maxXBoostLimit || deltaY > maxYBoostLimit) {
-            teleportPlayerBack(player, from);
+        if (horizontalDistance >= maxXBoostLimit || verticalDistance >= maxYBoostLimit) {
+            if (player.hasPermission(PERMISSION)) return;
+            event.setTo(oldLoc);
+            event.getPlayer().setVelocity(new Vector(0, 0, 0));
+            usersFlagging.add(player);
+            String exceedMessage = config.getString("flyboostlimiter.exceed-message");
+            chatUtils.sendMessage(player, exceedMessage);
+            String alertMessage = config.getString("flyboostlimiter.alert");
+            chatUtils.sendMessageToStaff(alertMessage.replace("%player%", player.getDisplayName()));
         }
-    }
-
-    private void teleportPlayerBack(Player player, Location from) {
-        player.teleport(from);
-        String exceedMessage = config.getString("flyboostlimiter.exceed-message");
-        chatUtils.sendMessage(player, exceedMessage);
-        String NiggaAlert = config.getString("flyboostlimiter.alert");
-        chatUtils.sendMessageToStaff(player, NiggaAlert.replace("%player%", player.getDisplayName()));
     }
 }
