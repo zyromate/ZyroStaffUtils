@@ -86,7 +86,6 @@ public class CaneBreakListener implements Listener {
 
         long lastBreakTime = caneBreakTime.getOrDefault(playerUUID, 0L);
 
-        // Reset the cane break count if the reset time has passed
         if (currentTime - lastBreakTime > resetTime) {
             caneBreakCount.put(playerUUID, 0);
         }
@@ -95,11 +94,9 @@ public class CaneBreakListener implements Listener {
         caneBreakCount.put(playerUUID, currentBreakCount);
         caneBreakTime.put(playerUUID, currentTime);
 
-        // If the cane break limit is exceeded, start the cooldown
         if (currentBreakCount > caneLimit) {
             cooldownStartTime.put(playerUUID, currentTime);
 
-            // Send message and cancel the event on the main thread
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 chatUtils.sendMessage(player, limitExceededMessage);
                 event.setCancelled(true);

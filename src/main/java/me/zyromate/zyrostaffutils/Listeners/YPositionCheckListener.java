@@ -38,13 +38,8 @@ public class YPositionCheckListener implements Listener {
         CompletableFuture.runAsync(() -> {
             FileConfiguration config = plugin.getConfig();
 
-            if (!isActivated(config)) {
-                return;
-            }
-
-            if (isInBlockedWorld(config, location.getWorld().getName())) {
-                return;
-            }
+            if (!isActivated(config)) return;
+            if (isInBlockedWorld(config, location.getWorld().getName())) return;
 
             if (location.getY() <= -1) {
                 Bukkit.getScheduler().runTask(plugin, () -> teleportPlayerToConfiguredLocation(player, config));
@@ -68,7 +63,6 @@ public class YPositionCheckListener implements Listener {
         if (world != null) {
             Location teleportLocation = new Location(world, x, y, z);
             player.teleport(teleportLocation);
-            plugin.getLogger().info("Teleported player " + player.getName() + " to " + teleportLocation);
         } else {
             plugin.getLogger().warning("The world specified in the config does not exist: " + worldName);
         }
